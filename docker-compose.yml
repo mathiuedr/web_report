@@ -1,0 +1,53 @@
+# docker-compose.yml
+services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:15-alpine
+    container_name: feedback-postgres
+    environment:
+      POSTGRES_DB: feedback_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d feedback_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NestJS приложение (обновленная версия Node)
+  api:
+    image: node:20-alpine  # МЕНЯЕМ НА 20 ВЕРСИЮ
+    container_name: feedback-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=feedback_db
+      - DB_USER=admin
+      - DB_PASSWORD=secret123
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "
+        echo 'Установка зависимостей...' &&
+        npm install &&
+        echo 'Сборка проекта...' &&
+        npm run build &&
+        echo 'Запуск сервера...' &&
+        npm run start:prod
+      "
+
+volumes:
+  postgres_data:

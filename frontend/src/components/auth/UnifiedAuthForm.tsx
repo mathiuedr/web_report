@@ -3,12 +3,13 @@
 
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { setAuthCookie, setAdminCookie } from '@/lib/auth'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Alert from '@/components/ui/Alert'
-import { setAuthCookie } from '@/lib/auth'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+const ADMIN_USER_ID = '11111111-1111-1111-1111-111111111111'
 
 export default function UnifiedAuthForm() {
   const [login, setLogin] = useState('')
@@ -37,11 +38,11 @@ export default function UnifiedAuthForm() {
         // Сохранить user_id в cookies
         await setAuthCookie(data.user_id)
         
-        // Определить роль пользователя (можно расширить логику)
-        const isAdmin = login.includes('admin') // Временная логика
+        // Проверить, является ли пользователь админом
+        const isAdmin = data.user_id === ADMIN_USER_ID
         
-        // Редирект в зависимости от роли
         if (isAdmin) {
+          await setAdminCookie('true')
           router.push('/current-requests')
         } else {
           router.push('/my-requests')

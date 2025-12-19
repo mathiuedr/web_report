@@ -1,11 +1,11 @@
-// src/components/user/UserNav.tsx
+// src/components/admin/AdminNav.tsx
 'use client'
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { removeAuthCookie } from '@/lib/auth'
 
-export default function UserNav() {
+export default function AdminNav() {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -15,8 +15,8 @@ export default function UserNav() {
   }
 
   const navItems = [
-    { href: '/my-requests', label: 'Мои отзывы' },
-    { href: '/new-request', label: 'Новый отзыв' },
+    { href: '/current-requests', label: 'Текущие отзывы' },
+    { href: '/archive', label: 'Архив' },
   ]
 
   return (
@@ -26,7 +26,7 @@ export default function UserNav() {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <h1 className="text-xl font-bold text-gray-900">
-                Обратная связь
+                Админ-панель
               </h1>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

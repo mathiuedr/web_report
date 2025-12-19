@@ -91,6 +91,7 @@ export default function RequestForm({ userId }: RequestFormProps) {
             block w-full rounded-md shadow-sm sm:text-sm
             border-gray-300 focus:border-blue-500 focus:ring-blue-500
             disabled:bg-gray-100 disabled:cursor-not-allowed
+            text-gray-900
             ${!isValid && charCount > 0 ? 'border-red-300' : ''}
           `}
           placeholder="Опишите вашу проблему или предложение..."

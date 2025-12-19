@@ -73,4 +73,12 @@ export class FeedbackService {
         if(!await this.feedbackRepo.checkUserIsAdmin(user_id)) return null
         return await this.feedbackRepo.getArchive()
     }
+    async getUserRequests(user_id:string){
+        const res = await this.feedbackRepo.findUserFeedbacks(user_id)
+        return res.map(r => ({
+            request_id: r.id,
+            text: r.text,
+            status: r.status
+        }));
+    }
 }

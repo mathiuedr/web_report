@@ -55,6 +55,12 @@ export class FeedbackController {
     return await this.feedbackService.getAnswers(userId)
   }
 
+  @Get('getUserRequests')
+  @HttpCode(HttpStatus.OK)
+  async getUserRequests(@Query('user_id') userId: string){
+    return await this.feedbackService.getUserRequests(userId)
+  }
+
   // ============ АДМИНСКИЕ ЭНДПОИНТЫ ============
 
   @Post('answerToRequest')

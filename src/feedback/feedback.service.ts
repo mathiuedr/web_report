@@ -52,14 +52,16 @@ export class FeedbackService {
         return false
     }
     
-    async getAnswers(user_id: string){
-        
-        const res = await this.feedbackRepo.getUserAnswers(user_id)
+    async getAnswers(user_id: string) {
+        const res = await this.feedbackRepo.findUserFeedbacks(user_id);
         return res.map(r => ({
             request_id: r.id,
             text: r.text,
+            answer: (r as any).answer ?? null,
+            status: r.status,
         }));
     }
+
     
     async deleteRequest(request_id: number, user_id: string){
         try{
@@ -72,13 +74,5 @@ export class FeedbackService {
     async getArchive(user_id:string){
         if(!await this.feedbackRepo.checkUserIsAdmin(user_id)) return null
         return await this.feedbackRepo.getArchive()
-    }
-    async getUserRequests(user_id:string){
-        const res = await this.feedbackRepo.findUserFeedbacks(user_id)
-        return res.map(r => ({
-            request_id: r.id,
-            text: r.text,
-            status: r.status
-        }));
     }
 }

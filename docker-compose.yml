@@ -49,5 +49,27 @@ services:
         npm run start:prod
       "
 
+  bot:
+    image: node:20-alpine
+    container_name: feedback-bot
+    depends_on:
+      - api
+    working_dir: /bot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - BACKEND_URL=http://api:3000/api
+    volumes:
+      - ./bot:/bot
+    command: >
+      sh -c "
+        echo 'Установка зависимостей бота...' &&
+        npm install &&
+        echo 'Сборка бота...' &&
+        npm run build &&
+        echo 'Запуск бота...' &&
+        npm run start
+      "
+
+
 volumes:
   postgres_data:

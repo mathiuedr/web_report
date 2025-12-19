@@ -8,8 +8,6 @@ export interface Feedback {
   text: string;
   status: 'PENDING' | 'ANSWERED';
   user_id: string;
-  created_at: Date;
-  updated_at: Date;
 }
 
 export interface FeedbackWithUser extends Feedback {
@@ -70,8 +68,8 @@ export class FeedbackRepository extends BaseRepository {
   async findUserFeedbacks(userId: string): Promise<Feedback[]> {
     const query = `
       SELECT * FROM feedbacks 
-      WHERE user_id = $1 
-      ORDER BY created_at DESC
+      WHERE user_id = $1
+      ORDER BY id DESC
     `;
     return this.executeQuery<Feedback>(query, [userId]);
   }
@@ -85,6 +83,7 @@ export class FeedbackRepository extends BaseRepository {
     `;
     return this.executeQuery<FeedbackWithUser>(query);
   }
+  
 
   async getArchive(): Promise<FeedbackWithUser[]> {
     const query = `

@@ -104,7 +104,6 @@ export class FeedbackRepository extends BaseRepository {
     return this.db.transaction(async (client) => {
       const answerQuery = `
         UPDATE feedbacks SET answer = $1, status = 'ANSWERED' WHERE id = $2
-        VALUES ($1, $2)
         RETURNING *
       `;
       const answerResult = await client.query<FeedbackAnswer>(

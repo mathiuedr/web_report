@@ -21,13 +21,14 @@ export class FeedbackService {
         response_text: string;
         user_id: string; // admin id
     }) {
-        if(await this.feedbackRepo.checkUserIsAdmin(data.user_id)){
+        const res = await this.feedbackRepo.checkUserIsAdmin(data.user_id)
+        if(res){
             const answer = await this.feedbackRepo.addAnswer(
                 data.request_id,
                 data.response_text,
                 data.user_id,
             );
-        return answer
+            return answer
         }else{
             return null
         }

@@ -59,6 +59,7 @@ export class FeedbackService {
         return res.map(r => ({
             request_id: r.id,
             text: r.text,
+            answer: r.answer
         }));
     }
     
